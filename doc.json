@@ -1,0 +1,45 @@
+{
+  "name": "afk",
+  "description": "Marks players as AFK if they stop moving & chatting for a set period of time",
+  "author": "Shock",
+  "config": {
+    "auto-afk": {
+      "description": "Automatically mark a player when the Auto AFK Timeout is reached",
+      "type": "boolean",
+      "default": true
+    },
+    "auto-afk-timeout": {
+      "description": "Number of minutes to wait until a player is marked as AFK",
+      "type": "number",
+      "default": "5"
+    },
+    "allow-manual-afk": {
+      "description": "Allow players to manually go AFK using the /afk command",
+      "type": "boolean",
+      "default": true
+    },
+    "afk-announce": {
+      "description": "If there are players marked as AFK when others join, notify them",
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "commands": [
+    {
+      "name": "/afk",
+      "description": "Manually go AFK",
+      "example": "/afk eating dinner",
+      "args": [{
+        "name": "reason",
+        "description": "Optional reason for going AFK displayed to other players",
+        "required": false
+      }]
+    },
+    {
+      "name": "/afkers",
+      "description": "List players currently marked as AFK",
+      "example": "/afkers",
+      "args": []
+    }
+  ]
+}
