@@ -154,17 +154,16 @@ class AFK {
 
     Omegga.on('cmd:afk', async (name, ...args) => {
       const player = Omegga.getPlayer(name);
-
-      if (!this.config['allow-manual-afk']) {
-        Omegga.whisper(player, `Manual AFK is currently disabled.`);
-        return;
-      }
-
       const reason = args.join(' ').trim();
 
       if (this.vars[player.id].afk && (reason == '' || reason == this.vars[player.id].reason)) {
         this.afk(player, false);
       } else {
+        if (!this.config['allow-manual-afk']) {
+          Omegga.whisper(player, `Manual AFK is currently disabled.`);
+          return;
+        }
+
         this.afk(player, true, reason);
       }
     });
