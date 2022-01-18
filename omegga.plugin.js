@@ -1,4 +1,4 @@
-const { chat: { sanitize }} = OMEGGA_UTIL;
+const { chat: { sanitize } } = OMEGGA_UTIL;
 
 class AFK {
   constructor(omegga, config) {
@@ -7,7 +7,10 @@ class AFK {
 
     this.vars = {};
     this.afkTimeout = Math.max(config['auto-afk-timeout'], 1) * 60;
-    this.afkCountdown = 15;
+    this.afkMaxTimeout = this.afkTimeout + Math.max(config['auto-afk-maxtimeout'], 0) * 60;
+    this.afkAction = config['auto-afk-action'];
+    this.afkExclusions = config['auto-afk-exclusions'];
+    this.afkCountdown = 10;
   }
 
   afk(player, afk, reason = '') {
@@ -20,6 +23,8 @@ class AFK {
       this.vars[player.id].reason = '';
       this.vars[player.id].count = 0;
     } else {
+      reason = sanitize(reason);
+
       Omegga.broadcast(`<b><color="${color}">${player.name}</></> is now AFK${reason == '' ? '.' : ' (' + reason + ')'}`);
 
       this.vars[player.id].afk = true;
@@ -39,23 +44,51 @@ class AFK {
     return total;
   }
 
+  hasExcludedRole(player) {
+    if (this.afkExclusions == null) return false;
+
+    let excludedRoles = this.afkExclusions.split(',');
+
+    for (const r of player.getRoles()) {
+      for (const x of excludedRoles) {
+        if (r == x.trim()) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   async init() {
     for (const p of Omegga.players) {
       this.vars[p.id] = {
-        'afk': false,
-        'reason': '',
-        'count': 0
+        afk: false,
+        reason: '',
+        count: 0
       };
     }
 
     if (this.config['auto-afk']) {
-      this.interval = setInterval(async () => {
+      this.afkInterval = setInterval(async () => {
         const positions = await Omegga.getAllPlayerPositions();
 
         for (const o of positions) {
           const player = o.player;
 
-          if (this.vars[player.id].afk) continue;
+          this.vars[player.id].count++;
+
+          if (this.vars[player.id].afk) {
+            if (player.isHost()) continue;
+
+            if (this.hasExcludedRole(player)) continue;
+
+            if (this.afkAction == 'kick' && this.vars[player.id].count >= this.afkMaxTimeout) {
+              Omegga.writeln(`Chat.Command /kick "${player.name}" "AFK (Auto)"`);
+            }
+
+            continue;
+          }
 
           let curPos = o.pos;
 
@@ -80,8 +113,6 @@ class AFK {
             if (this.vars[player.id].count == (this.afkTimeout - this.afkCountdown)) {
               Omegga.whisper(player, `<color="ff9999">You will be automatically marked as AFK in <b>${this.afkCountdown}s</> unless you move or chat.</>`);
             }
-
-            this.vars[player.id].count++;
           }
         }
       }, 1000);
@@ -99,16 +130,16 @@ class AFK {
 
     Omegga.on('join', async (player) => {
       this.vars[player.id] = {
-        'afk': false,
-        'reason': '',
-        'count': 0
+        afk: false,
+        reason: '',
+        count: 0
       };
 
       if (this.config['afk-announce']) {
         const total = this.totalAFKCount();
 
         if (total > 0) {
-          Omegga.whisper(player, `There ${total == 1 ? 'is' : 'are'} currently <b>${total}</> ${total == 1 ? 'player' : 'players'} AFK, to view who they are do <code>/afkers</>`);
+          Omegga.whisper(player, `There ${total == 1 ? 'is' : 'are'} currently <b>${total}</> player${total == 1 ? '' : 's'} AFK, to view who they are type <code>/afkers</>`);
         }
       }
     });
@@ -129,7 +160,7 @@ class AFK {
         return;
       }
 
-      const reason = sanitize(args.join(' ').trim());
+      const reason = args.join(' ').trim();
 
       if (this.vars[player.id].afk && (reason == '' || reason == this.vars[player.id].reason)) {
         this.afk(player, false);
@@ -157,11 +188,11 @@ class AFK {
       }
     });
 
-    return {registeredCommands: ['afk', 'afkers']};
+    return { registeredCommands: ['afk', 'afkers'] };
   }
 
   async stop() {
-    clearInterval(this.interval);
+    clearInterval(this.afkInterval);
   }
 };
 

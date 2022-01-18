@@ -4,7 +4,7 @@
   "author": "Shock",
   "config": {
     "auto-afk": {
-      "description": "Automatically mark a player when the Auto AFK Timeout is reached",
+      "description": "Automatically mark a player as AFK when the Auto AFK Timeout is reached",
       "type": "boolean",
       "default": true
     },
@@ -12,6 +12,22 @@
       "description": "Number of minutes to wait until a player is marked as AFK",
       "type": "number",
       "default": "5"
+    },
+    "auto-afk-maxtimeout": {
+      "description": "Number of additional minutes to wait before taking action on a player that has been marked as AFK",
+      "type": "number",
+      "default": "10"
+    },
+    "auto-afk-action": {
+      "description": "Action to take after the Auto AFK Max Timeout is reached",
+      "type": "enum",
+      "options": ["none", "kick"],
+      "default": "none"
+    },
+    "auto-afk-exclusions": {
+      "description": "Roles to exclude from Auto AFK Action",
+      "type": "string",
+      "default": ""
     },
     "allow-manual-afk": {
       "description": "Allow players to manually go AFK using the /afk command",
