@@ -147,7 +147,7 @@ class AFK {
               }
             }
           } else {
-            if (this.vars[p.id].asleep >= this.afkTimeout) {
+            if (this.vars[p.id].asleep >= this.afkTimeout && this.vars[p.id].confidence == 2) {
               this.afk(p, true);
               continue;
             }
