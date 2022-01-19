@@ -2,17 +2,22 @@
 
 A plugin for [Omegga](https://github.com/brickadia-community/omegga) that marks players as AFK if they stop moving & chatting for a set period of time.
 
+By default, players will automatically be given AFK status if they do not move for 5 minutes.
+
 Players can manually go AFK using `/afk <optional reason>`\
-Players can also be automatically kicked if they go AFK for too long.
+They can also be automatically kicked if they go AFK for too long.
 
-Only the use of `/afk` or chatting will remove an AFK status once it has been set.\
-**This is because other players can interfere with the movement detection.**
+Both of the above can be switched on and off in the configuration.
 
-Players who are AFK will be constantly reminded of so in chat.
+AFK status will be automatically revoked once a player moves or chats.
 
-## Installation
+## Installing
 
-Do `git clone https://github.com/ShockFromBL/omegga-afk afk` in Omegga's `plugins` directory.
+Do `omegga install gh:ShockFromBL/afk`
+
+## Updating
+
+Do `omegga update afk`
 
 ## Commands
 
