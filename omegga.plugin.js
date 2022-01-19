@@ -34,15 +34,15 @@ class AFK {
 
   // modified from https://github.com/voximity/omegga-behind-you/blob/720277eb6e07784541bc1b7800fdd15c7f5a2f29/omegga.plugin.js#L17
   async getPlayerTransform(player) {
-    const match = await this.omegga.watchLogChunk(
-      `Chat.Command /GetTransform ${player.name}`,
-      /Transform: X=(-?[0-9,.]+) Y=(-?[0-9,.]+) Z=(-?[0-9,.]+) Roll=(-?[0-9,.]+) Pitch=(-?[0-9,.]+) Yaw=(-?[0-9,.]+)/,
-      {first: (match) => match[0].startsWith('Transform:'), timeoutDelay: 1000}
-    );
-
     let result;
 
     try {
+      const match = await this.omegga.watchLogChunk(
+        `Chat.Command /GetTransform ${player.name}`,
+        /Transform: X=(-?[0-9,.]+) Y=(-?[0-9,.]+) Z=(-?[0-9,.]+) Roll=(-?[0-9,.]+) Pitch=(-?[0-9,.]+) Yaw=(-?[0-9,.]+)/,
+        {first: (match) => match[0].startsWith('Transform:'), timeoutDelay: 1000}
+      );
+
       result = {x: match[0][1], y: match[0][2], z: match[0][3], roll: match[0][4], pitch: match[0][5], yaw: match[0][6]};
     } catch (e) {
       if (e instanceof TypeError) {
