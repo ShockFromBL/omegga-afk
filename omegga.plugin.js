@@ -20,6 +20,19 @@ class AFK {
     if (!afk) {
       Omegga.broadcast(`<b><color="${color}">${player.name}</></> is no longer AFK.`);
 
+      let time;
+      let denom;
+
+      if (this.vars[player.id].asleep < 60) {
+        time = this.vars[player.id].asleep;
+        denom = (time == 1 ? 'second' : 'seconds');
+      } else {
+        time = Math.floor(this.vars[player.id].asleep / 60);
+        denom = (time == 1 ? 'minute' : 'minutes');
+      }
+
+      Omegga.whisper(player, `You were away for <b>${time}</> ${denom}.`);
+
       this.vars[player.id].afk = false;
       this.vars[player.id].reason = '';
       this.vars[player.id].asleep = 0;
@@ -106,10 +119,10 @@ class AFK {
           if (transform != null) curYaw = transform.yaw;
 
           if (this.vars[p.id].yaw != curYaw) {
-            if (this.vars[p.id].confidence < 2) {
+            if (this.vars[p.id].confidence < 2 && !this.vars[p.id].afk) {
               if (this.vars[p.id].asleep >= (this.afkTimeout - this.afkCountdown) &&
                   this.vars[p.id].asleep <= (this.afkTimeout)) {
-                Omegga.whisper(p, `AFK Countdown aborted.`);
+                Omegga.whisper(p, `AFK countdown aborted.`);
               }
 
               this.vars[p.id].asleep = 0;
