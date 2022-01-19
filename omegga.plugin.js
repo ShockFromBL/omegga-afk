@@ -8,6 +8,7 @@ class AFK {
     this.vars = {};
     this.afkTimeout = Math.max(config['auto-afk-timeout'], 1) * 60;
     this.afkMaxTimeout = this.afkTimeout + Math.max(config['auto-afk-maxtimeout'], 0) * 60;
+    this.afkThreshold = Math.max(config['auto-afk-threshold'], 1);
     this.afkAction = config['auto-afk-action'];
     this.afkExclusions = config['auto-afk-exclusions'];
     this.afkCountdown = 10;
@@ -128,7 +129,7 @@ class AFK {
             }
 
             if (this.afkAction == 'kick' && this.vars[p.id].asleep >= this.afkMaxTimeout) {
-              if (!p.isHost() && !this.hasExcludedRole(p) && this.vars[p.id].confidence == 2) {
+              if (!p.isHost() && !this.hasExcludedRole(p) && this.vars[p.id].confidence == 2 && Omegga.players.length >= this.afkThreshold) {
                 Omegga.writeln(`Chat.Command /kick "${p.name}" "AFK (Auto)"`);
               }
             }
@@ -154,7 +155,7 @@ class AFK {
       } else {
         if (this.vars[player.id].asleep >= (this.afkTimeout - this.afkCountdown) &&
             this.vars[player.id].asleep <= (this.afkTimeout)) {
-          Omegga.whisper(player, `AFK Countdown aborted.`);
+          Omegga.whisper(player, `AFK countdown aborted.`);
         }
 
         this.vars[player.id].asleep = 0;

@@ -4,7 +4,7 @@
   "author": "Shock",
   "config": {
     "auto-afk": {
-      "description": "Automatically mark a player as AFK when the Auto AFK Timeout is reached",
+      "description": "Automatically mark a player as AFK when the timeout is reached",
       "type": "boolean",
       "default": true
     },
@@ -14,28 +14,33 @@
       "default": "5"
     },
     "auto-afk-maxtimeout": {
-      "description": "Number of additional minutes to wait before taking action on a player that has been marked as AFK",
+      "description": "Additional number of minutes to wait before taking action on a player that has been marked as AFK",
       "type": "number",
       "default": "10"
     },
+    "auto-afk-threshold": {
+      "description": "Minimum number of players required before taking action on a player that has been marked as AFK",
+      "type": "number",
+      "default": "1"
+    },
     "auto-afk-action": {
-      "description": "Action to take after the Auto AFK Max Timeout is reached",
+      "description": "Action to take when the max timeout is reached",
       "type": "enum",
       "options": ["none", "kick"],
       "default": "none"
     },
     "auto-afk-exclusions": {
-      "description": "Roles to exclude from Auto AFK Action",
+      "description": "Restrict action against players marked as AFK if they are part of the specified roles (comma-separated)",
       "type": "string",
       "default": ""
     },
     "allow-manual-afk": {
-      "description": "Allow players to manually go AFK using the /afk command",
+      "description": "Permit players to manually go AFK using the /afk command",
       "type": "boolean",
       "default": true
     },
     "afk-announce": {
-      "description": "If there are players marked as AFK when others join, notify them",
+      "description": "Announce to joining players if there are people currently AFK",
       "type": "boolean",
       "default": true
     }

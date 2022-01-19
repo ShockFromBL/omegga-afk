@@ -30,10 +30,11 @@ Do `omegga update afk`
 
 | Setting | Description | Default |
 | ------------- | ------------- | ------------- |
-| `auto-afk` | Automatically mark a player as AFK when the Auto AFK Timeout is reached. | ON |
+| `auto-afk` | Automatically mark a player as AFK when the timeout is reached. | On |
 | `auto-afk-timeout` | Number of minutes to wait until a player is marked as AFK. | 5 |
-| `auto-afk-maxtimeout` | Number of additional minutes to wait before taking action on a player that has been marked as AFK. | 10 |
-| `auto-afk-action` | Action to take after the Auto AFK Max Timeout is reached. | None |
-| `auto-afk-exclusions` | Roles to exclude from Auto AFK Action. | |
-| `allow-manual-afk` | Allow players to manually go AFK using the `/afk` command. | ON |
-| `afk-announce` | If there are players marked as AFK when others join, notify them. | ON |
+| `auto-afk-maxtimeout` | Additional number of minutes to wait before taking action on a player that has been marked as AFK. | 10 |
+| `auto-afk-threshold` | Minimum number of players required before taking action on a player that has been marked as AFK. | 1 |
+| `auto-afk-action` | Action to take when the max timeout is reached. | None |
+| `auto-afk-exclusions` | Restrict action against players marked as AFK if they are part of the specified roles (comma-separated). | |
+| `allow-manual-afk` | Permit players to manually go AFK using the `/afk` command. | On |
+| `afk-announce` | Announce to joining players if there are people currently AFK. | On |
