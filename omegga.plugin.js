@@ -58,7 +58,7 @@ class AFK {
     try {
       const regex = /Transform: X=(-?[0-9,.]+) Y=(-?[0-9,.]+) Z=(-?[0-9,.]+) Roll=(-?[0-9,.]+) Pitch=(-?[0-9,.]+) Yaw=(-?[0-9,.]+)/;
       const match = await this.omegga.watchLogChunk(
-        `Chat.Command /GetTransform ${player.name}`,
+        `Chat.Command /GetTransform "${player.name}"`,
         regex,
         { first: (match) => match[0].startsWith('Transform:'), timeoutDelay: this.afkClock }
       );
